@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block titulo %}Cadastrar Novo Autor{% endblock %}
+
+{% block conteudo %}
+<h1>Cadastrar Novo Autor</h1>
+
+<div id="mensagem"></div>
+
+<form id="formAutor">
+    <div class="form-group">
+        <label for="nome">Nome *</label>
+        <input type="text" id="nome" name="nome" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="nacionalidade">Nacionalidade</label>
+        <input type="text" id="nacionalidade" name="nacionalidade">
+    </div>
+    
+    <div class="form-group">
+        <label for="data_nascimento">Data de Nascimento</label>
+        <input type="date" id="data_nascimento" name="data_nascimento">
+    </div>
+    
+    <div class="form-group">
+        <label for="biografia">Biografia</label>
+        <textarea id="biografia" name="biografia" placeholder="Breve biografia do autor..."></textarea>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <button type="submit">Cadastrar Autor</button>
+        <button type="button" class="btn-secondary" onclick="limparFormulario()">Limpar</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+document.getElementById('formAutor').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const dados = {};
+    
+    for (let [key, value] of formData.entries()) {
+        if (value.trim() !== '') {
+            dados[key] = value;
+        }
+    }
+    
+    try {
+        const response = await fetch('/autores', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dados)
+        });
+        
+        const resultado = await response.json();
+        
+        if (response.ok) {
+            mostrarMensagem('Autor cadastrado com sucesso!', 'success');
+            document.getElementById('formAutor').reset();
+        } else {
+            mostrarMensagem('Erro: ' + resultado.erro, 'error');
+        }
+    } catch (error) {
+        mostrarMensagem('Erro ao cadastrar autor: ' + error.message, 'error');
+    }
+});
+
+function mostrarMensagem(texto, tipo) {
+    const div = document.getElementById('mensagem');
+    div.innerHTML = `<div class="alert alert-${tipo}">${texto}</div>`;
+    setTimeout(() => {
+        div.innerHTML = '';
+    }, 5000);
+}
+
+function limparFormulario() {
+    document.getElementById('formAutor').reset();
+    document.getElementById('mensagem').innerHTML = '';
+}
+{% endblock %}
+

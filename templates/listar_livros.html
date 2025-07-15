@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block titulo %}Lista de Livros{% endblock %}
+
+{% block conteudo %}
+<h1>Livros Cadastrados</h1>
+
+<div id="loading" style="text-align: center; margin: 20px;">
+    Carregando livros...
+</div>
+
+<div id="lista-livros" style="display: none;">
+    <div style="margin-bottom: 20px;">
+        <button onclick="carregarLivros()" class="btn-secondary">Atualizar Lista</button>
+    </div>
+    
+    <div id="livros-container"></div>
+</div>
+
+<div id="sem-livros" style="display: none; text-align: center; margin: 40px;">
+    <p>Nenhum livro cadastrado ainda.</p>
+    <a href="/livros/novo">
+        <button>Cadastrar Primeiro Livro</button>
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+document.addEventListener('DOMContentLoaded', function() {
+    carregarLivros();
+});
+
+async function carregarLivros() {
+    const loading = document.getElementById('loading');
+    const lista = document.getElementById('lista-livros');
+    const semLivros = document.getElementById('sem-livros');
+    const container = document.getElementById('livros-container');
+    
+    loading.style.display = 'block';
+    lista.style.display = 'none';
+    semLivros.style.display = 'none';
+    
+    try {
+        const response = await fetch('/livros');
+        const livros = await response.json();
+        
+        loading.style.display = 'none';
+        
+        if (livros.length === 0) {
+            semLivros.style.display = 'block';
+        } else {
+            lista.style.display = 'block';
+            exibirLivros(livros);
+        }
+    } catch (error) {
+        loading.style.display = 'none';
+        container.innerHTML = '<div class="alert alert-error">Erro ao carregar livros: ' + error.message + '</div>';
+        lista.style.display = 'block';
+    }
+}
+
+function exibirLivros(livros) {
+    const container = document.getElementById('livros-container');
+    
+    let html = '<div style="display: grid; gap: 20px;">';
+    
+    livros.forEach(livro => {
+        html += `
+            <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9;">
+                <h3 style="margin-top: 0; color: #333;">${livro.titulo}</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <div><strong>ID:</strong> ${livro.id}</div>
+                    <div><strong>Autor:</strong> ${livro.nome_autor || 'Não informado'}</div>
+                    <div><strong>ISBN:</strong> ${livro.isbn || 'Não informado'}</div>
+                    <div><strong>Ano:</strong> ${livro.ano_publicacao || 'Não informado'}</div>
+                    <div><strong>Gênero:</strong> ${livro.genero || 'Não informado'}</div>
+                    <div><strong>Páginas:</strong> ${livro.numero_paginas || 'Não informado'}</div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block titulo %}Sistema de Biblioteca - Início{% endblock %}
+
+{% block conteudo %}
+<h1>Sistema de Gerenciamento de Biblioteca</h1>
+
+    <div style="text-align: center; margin: 40px 0;">
+        <h2>Bem-vindo ao Sistema de Biblioteca</h2>
+        <p>Gerencie autores e livros de forma simples e eficiente.</p>
+        
+        <div style="margin: 30px 0;">
+        <a href="/autores/novo" style="display: inline-block; margin: 10px;">
+            <button>Cadastrar Novo Autor</button>
+        </a>
+        <a href="/livros/novo" style="display: inline-block; margin: 10px;">
+            <button>Cadastrar Novo Livro</button>
+        </a>
+        <a href="/autores" style="display: inline-block; margin: 10px;">
+            <button class="btn-secondary">Ver Autores</button>
+        </a>
+        <a href="/livros" style="display: inline-block; margin: 10px;">
+            <button class="btn-secondary">Ver Livros</button>
+        </a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;">
+    <div>
+        <h3>Funcionalidades do Sistema</h3>
+        <ul>
+            <li>Cadastro de autores com informações completas</li>
+            <li>Cadastro de livros vinculados aos autores</li>
+            <li>API RESTful para integração</li>
+            <li>Interface web responsiva</li>
+        </ul>
+    </div>
+    
+    <div>
+        <h3>Tecnologias Utilizadas</h3>
+        <ul>
+            <li>Python com Flask</li>
+            <li>SQLite para persistência</li>
+            <li>Arquitetura MVC</li>
+            <li>Testes automatizados</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
