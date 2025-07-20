@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistema de Biblioteca</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/autores">Autores</a></li>
+                    <li><a href="/livros">Livros</a></li>
+                    <li><a href="/autores/novo">Cadastrar Autor</a></li>
+                    <li><a href="/livros/novo">Cadastrar Livro</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2><%= title %></h2>
+                    <a href="/autores/novo" class="btn btn-success">Novo Autor</a>
+                </div>
+                
+                <div id="authorsTable">
+                    <div class="loading">Carregando autores...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Biblioteca - Projeto Final GQS</p>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script>
+        async function loadAuthorsTable() {
+            const tableDiv = document.getElementById('authorsTable');
+            showLoading(tableDiv);
+            
+            try {
+                const authors = await loadAuthors();
+                
+                if (authors.length === 0) {
+                    tableDiv.innerHTML = '<p>Nenhum autor cadastrado.</p>';
+                    return;
+                }
+                
+                let tableHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Nacionalidade</th>
+                                <th>Data de Nascimento</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                authors.forEach(author => {
+                    const dataNascimento = author.data_nascimento ? 
+                        new Date(author.data_nascimento).toLocaleDateString('pt-BR') : 
+                        'Não informado';
+                    
+                    tableHTML += `
+                        <tr>
+                            <td>${author.id}</td>
+                            <td>${author.nome}</td>
+                            <td>${author.nacionalidade || 'Não informado'}</td>
+                            <td>${dataNascimento}</td>
+                            <td>
+                                <button onclick="deleteAuthor(${author.id})" class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += '</tbody></table>';
+                tableDiv.innerHTML = tableHTML;
+                
+            } catch (error) {
+                tableDiv.innerHTML = '<p>Erro ao carregar autores.</p>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadAuthorsTable);
+    </script>
+</body>
+</html>
+

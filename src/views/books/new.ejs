@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistema de Biblioteca</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/autores">Autores</a></li>
+                    <li><a href="/livros">Livros</a></li>
+                    <li><a href="/autores/novo">Cadastrar Autor</a></li>
+                    <li><a href="/livros/novo">Cadastrar Livro</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <h2><%= title %></h2>
+                
+                <form id="bookForm" onsubmit="submitBookForm(event)">
+                    <div class="form-group">
+                        <label for="titulo">Título *</label>
+                        <input type="text" id="titulo" name="titulo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="isbn">ISBN</label>
+                        <input type="text" id="isbn" name="isbn" placeholder="Ex: 978-3-16-148410-0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ano_publicacao">Ano de Publicação</label>
+                        <input type="number" id="ano_publicacao" name="ano_publicacao" min="1000" max="2025">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author_id">Autor</label>
+                        <select id="author_id" name="author_id">
+                            <option value="">Selecione um autor</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Cadastrar Livro</button>
+                    <a href="/livros" class="btn" style="background: #6c757d;">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Biblioteca - Projeto Final GQS</p>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script>
+        async function loadAuthorsSelect() {
+            try {
+                const authors = await loadAuthors();
+                const select = document.getElementById('author_id');
+                
+                authors.forEach(author => {
+                    const option = document.createElement('option');
+                    option.value = author.id;
+                    option.textContent = author.nome;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar autores:', error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadAuthorsSelect);
+    </script>
+</body>
+</html>
+

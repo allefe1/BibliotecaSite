@@ -1,214 +1,106 @@
-# Sistema de Gerenciamento de Biblioteca
+# Sistema de Cadastro de Livros e Autores
 
-Sistema web desenvolvido em Python com Flask para gerenciamento de biblioteca, seguindo arquitetura MVC e práticas de qualidade de software.
+## Projeto Final - Gestão da Qualidade de Software
 
-## Funcionalidades
+## 📋 Descrição
 
-- **Cadastro de Autores**: Gerenciamento completo de autores com informações detalhadas
-- **Cadastro de Livros**: Gerenciamento de livros vinculados aos autores
-- **API RESTful**: Endpoints completos para operações CRUD
-- **Interface Web**: Views responsivas para cadastro
-- **Testes Automatizados**: Cobertura completa de testes unitários
+Este projeto implementa uma aplicação web completa para gerenciamento de livros e autores, desenvolvida com arquitetura MVC (Model-View-Controller) utilizando Node.js, Express.js e SQLite. A aplicação inclui uma API RESTful completa, interface web responsiva e uma suíte abrangente de testes automatizados.
 
-## Tecnologias Utilizadas
+## 🏗️ Arquitetura
 
-- **Backend**: Python 3.11, Flask 2.3.3
-- **Banco de Dados**: SQLite
-- **Testes**: pytest, pytest-flask
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Arquitetura**: MVC (Model-View-Controller)
+### Estrutura MVC
 
-## Estrutura do Projeto
+- **Models:** Gerenciam a lógica de dados e interação com o banco SQLite
+- **Views:** Interface web responsiva desenvolvida com EJS
+- **Controllers:** Processam requisições HTTP e coordenam Models e Views
 
-```
-projeto-biblioteca/
-├── src/
-│   ├── controllers/          # Controladores (lógica de negócio)
-│   │   ├── controlador_autor.py
-│   │   └── controlador_livro.py
-│   ├── models/              # Modelos (entidades)
-│   │   ├── autor.py
-│   │   └── livro.py
-│   ├── routes/              # Rotas da API
-│   │   ├── rotas_autor.py
-│   │   └── rotas_livro.py
-│   ├── views/               # Templates HTML
-│   ├── public/              # Arquivos estáticos
-│   └── database/            # Configuração do banco
-│       └── configuracao_bd.py
-├── tests/                   # Testes automatizados
-│   ├── unit/               # Testes unitários
-│   │   ├── test_autor.py
-│   │   └── test_livro.py
-│   └── conftest.py         # Configuração dos testes
-├── templates/              # Templates HTML
-│   ├── base.html
-│   ├── index.html
-│   ├── novo_autor.html
-│   └── novo_livro.html
-├── app.py                  # Aplicação principal
-├── requirements.txt        # Dependências
-└── README.md              # Documentação
-```
+### Tecnologias Utilizadas
 
-## Instalação
+- **Backend:** Node.js, Express.js
+- **Banco de Dados:** SQLite3
+- **Template Engine:** EJS
+- **Testes:** Jest, Supertest, Cypress
+- **Frontend:** HTML5, CSS3, JavaScript ES6+
+
+
+## 🚀 Instalação e Configuração
 
 ### Pré-requisitos
 
-- Python 3.11 ou superior
-- pip (gerenciador de pacotes Python)
+- Node.js (versão 14 ou superior)
+- npm (gerenciador de pacotes do Node.js)
 
-### Passos para instalação
+### Passos para Instalação
 
-1. **Clone ou baixe o projeto**
+1. **Clone ou baixe o projeto:**
    ```bash
-   cd projeto-biblioteca
+   git clone <url-do-repositorio>
+   cd projeto-final
    ```
 
-2. **Instale as dependências**
+2. **Instale as dependências:**
    ```bash
-   pip install -r requirements.txt
+   npm install
    ```
 
-3. **Inicialize o banco de dados**
-   ```bash
-   python src/database/configuracao_bd.py
-   ```
+3. **O banco de dados SQLite será criado automaticamente na primeira execução**
 
-## Como Executar
+## 🎯 Como Executar
 
-### Executar a aplicação
+### Executar a Aplicação
 
 ```bash
-python app.py
+# Modo produção
+npm start
+
+# Modo desenvolvimento (com auto-reload)
+npm run dev
 ```
 
-A aplicação estará disponível em: `http://localhost:5000`
+A aplicação estará disponível em: `http://localhost:3000`
 
-### Páginas disponíveis
+### Executar Testes
 
-- **Página inicial**: `http://localhost:5000/`
-- **Cadastro de autores**: `http://localhost:5000/autores/novo`
-- **Cadastro de livros**: `http://localhost:5000/livros/novo`
+```bash
+# Todos os testes
+npm test
 
-## API RESTful
+# Testes E2E com Cypress (interface gráfica)
+npm run cypress:open
 
-### Endpoints para Autores
+# Testes E2E com Cypress (modo headless)
+npm run cypress:run
+```
+## 🔌 API RESTful
+
+### Endpoints de Autores
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| POST | `/autores` | Criar novo autor |
-| GET | `/autores` | Listar todos os autores |
-| GET | `/autores/{id}` | Obter autor por ID |
-| PUT | `/autores/{id}` | Atualizar autor |
-| DELETE | `/autores/{id}` | Deletar autor |
+| POST | `/api/authors` | Criar novo autor |
+| GET | `/api/authors` | Listar todos os autores |
+| GET | `/api/authors/:id` | Buscar autor por ID |
+| PUT | `/api/authors/:id` | Atualizar autor |
+| DELETE | `/api/authors/:id` | Excluir autor |
 
-### Endpoints para Livros
+### Endpoints de Livros
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| POST | `/livros` | Criar novo livro |
-| GET | `/livros` | Listar todos os livros |
-| GET | `/livros/{id}` | Obter livro por ID |
-| PUT | `/livros/{id}` | Atualizar livro |
-| DELETE | `/livros/{id}` | Deletar livro |
+| POST | `/api/books` | Criar novo livro |
+| GET | `/api/books` | Listar todos os livros |
+| GET | `/api/books/:id` | Buscar livro por ID |
+| PUT | `/api/books/:id` | Atualizar livro |
+| DELETE | `/api/books/:id` | Excluir livro |
 
-### Exemplos de uso da API
 
-#### Criar um autor
-```bash
-curl -X POST http://localhost:5000/autores \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nome": "Machado de Assis",
-    "nacionalidade": "Brasileira",
-    "data_nascimento": "1839-06-21",
-    "biografia": "Escritor brasileiro"
-  }'
-```
+## 📈 Qualidade do Código
 
-#### Criar um livro
-```bash
-curl -X POST http://localhost:5000/livros \
-  -H "Content-Type: application/json" \
-  -d '{
-    "titulo": "Dom Casmurro",
-    "isbn": "978-85-359-0277-5",
-    "ano_publicacao": 1899,
-    "genero": "Romance",
-    "numero_paginas": 256,
-    "autor_id": 1
-  }'
-```
+### Práticas Implementadas
 
-## Executar Testes
-
-### Executar todos os testes
-```bash
-python -m pytest tests/ -v
-```
-
-### Executar testes específicos
-```bash
-# Testes de autores
-python -m pytest tests/unit/test_autor.py -v
-
-# Testes de livros
-python -m pytest tests/unit/test_livro.py -v
-```
-
-### Cobertura de testes
-
-Os testes cobrem:
-- ✅ Criação de entidades (casos de sucesso e erro)
-- ✅ Listagem de entidades
-- ✅ Busca por ID (existente e inexistente)
-- ✅ Atualização de entidades
-- ✅ Remoção de entidades
-- ✅ Validação de dados obrigatórios
-- ✅ Tratamento de erros (IDs inexistentes, dados inválidos)
-
-## Banco de Dados
-
-### Estrutura das tabelas
-
-#### Tabela `autores`
-- `id` (INTEGER, PRIMARY KEY, AUTOINCREMENT)
-- `nome` (TEXT, NOT NULL)
-- `nacionalidade` (TEXT)
-- `data_nascimento` (TEXT)
-- `biografia` (TEXT)
-
-#### Tabela `livros`
-- `id` (INTEGER, PRIMARY KEY, AUTOINCREMENT)
-- `titulo` (TEXT, NOT NULL)
-- `isbn` (TEXT, UNIQUE)
-- `ano_publicacao` (INTEGER)
-- `genero` (TEXT)
-- `numero_paginas` (INTEGER)
-- `autor_id` (INTEGER, FOREIGN KEY)
-
-## Desenvolvimento
-
-### Arquitetura MVC
-
-- **Model**: Classes `Autor` e `Livro` em `src/models/`
-- **View**: Templates HTML em `templates/`
-- **Controller**: Classes controladoras em `src/controllers/`
-
-### Padrões utilizados
-
-- Separação de responsabilidades
-- Injeção de dependências
-- Tratamento de erros consistente
-- Validação de dados
-- Testes automatizados
-
-## Autor
-
-Projeto desenvolvido para a disciplina TAD0203 - Gestão da Qualidade de Software.
-
-## Licença
-
-Este projeto é desenvolvido para fins educacionais.
+- **Arquitetura MVC:** Separação clara de responsabilidades
+- **Tratamento de Erros:** Middleware de tratamento de erros
+- **Validação de Dados:** Validação tanto no frontend quanto no backend
+- **Código Limpo:** Funções pequenas e bem definidas
+- **Documentação:** Código bem documentado e README completo
 

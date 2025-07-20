@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistema de Biblioteca</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/autores">Autores</a></li>
+                    <li><a href="/livros">Livros</a></li>
+                    <li><a href="/autores/novo">Cadastrar Autor</a></li>
+                    <li><a href="/livros/novo">Cadastrar Livro</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2><%= title %></h2>
+                    <a href="/livros/novo" class="btn btn-success">Novo Livro</a>
+                </div>
+                
+                <div id="booksTable">
+                    <div class="loading">Carregando livros...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Biblioteca - Projeto Final GQS</p>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script>
+        async function loadBooksTable() {
+            const tableDiv = document.getElementById('booksTable');
+            showLoading(tableDiv);
+            
+            try {
+                const books = await loadBooks();
+                
+                if (books.length === 0) {
+                    tableDiv.innerHTML = '<p>Nenhum livro cadastrado.</p>';
+                    return;
+                }
+                
+                let tableHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>ISBN</th>
+                                <th>Ano</th>
+                                <th>Autor</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                books.forEach(book => {
+                    tableHTML += `
+                        <tr>
+                            <td>${book.id}</td>
+                            <td>${book.titulo}</td>
+                            <td>${book.isbn || 'Não informado'}</td>
+                            <td>${book.ano_publicacao || 'Não informado'}</td>
+                            <td>${book.author_name || 'Não informado'}</td>
+                            <td>
+                                <button onclick="deleteBook(${book.id})" class="btn btn-danger" style="padding: 5px 10px; font-size: 14px;">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += '</tbody></table>';
+                tableDiv.innerHTML = tableHTML;
+                
+            } catch (error) {
+                tableDiv.innerHTML = '<p>Erro ao carregar livros.</p>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadBooksTable);
+    </script>
+</body>
+</html>
+
