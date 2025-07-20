@@ -97,10 +97,3 @@ npm run cypress:run
 ## 📈 Qualidade do Código
 
 ### Práticas Implementadas
-
-- **Arquitetura MVC:** Separação clara de responsabilidades
-- **Tratamento de Erros:** Middleware de tratamento de erros
-- **Validação de Dados:** Validação tanto no frontend quanto no backend
-- **Código Limpo:** Funções pequenas e bem definidas
-- **Documentação:** Código bem documentado e README completo
-
